@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🗂️ Project Management App
 
 A full-stack task management application built with **React**, **Node.js**, **Express**, and **MongoDB**, featuring a simple authentication system using **bcryptjs**.
@@ -141,3 +142,6 @@ Pull requests are welcome! For major changes, open an issue first to discuss wha
 ## 📝 License
 
 This project is licensed under the MIT License.
+=======
+# Project-collab-tool
+>>>>>>> 3bff548 (Integrating both backend and frontend)
