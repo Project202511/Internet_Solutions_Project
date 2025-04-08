@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaTimes } from 'react-icons/fa';
+import { FaTimes, FaEdit, FaClipboardList } from 'react-icons/fa';
 
 const TaskForm = ({ addTask, updateTask, task, groups, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -61,14 +61,15 @@ const TaskForm = ({ addTask, updateTask, task, groups, onCancel }) => {
   };
   
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="bg-white rounded-lg shadow-md p-6 border border-neutral-200">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold text-gray-800">
+        <h3 className="text-lg font-semibold text-neutral-800 flex items-center">
+          {task ? <FaEdit className="mr-2" /> : <FaClipboardList className="mr-2" />}
           {task ? 'Edit Task' : 'Create New Task'}
         </h3>
         <button 
           onClick={onCancel}
-          className="text-gray-500 hover:text-gray-700"
+          className="text-neutral-500 hover:text-neutral-700 p-1 rounded-full hover:bg-neutral-100"
         >
           <FaTimes />
         </button>
@@ -76,7 +77,7 @@ const TaskForm = ({ addTask, updateTask, task, groups, onCancel }) => {
       
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
+          <label className="block text-neutral-700 text-sm font-bold mb-2" htmlFor="title">
             Title *
           </label>
           <input
@@ -85,14 +86,14 @@ const TaskForm = ({ addTask, updateTask, task, groups, onCancel }) => {
             name="title"
             value={title}
             onChange={handleChange}
-            className={`input ${errors.title ? 'border-red-500' : ''}`}
+            className={`input ${errors.title ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''}`}
             placeholder="Task title"
           />
           {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title}</p>}
         </div>
         
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
+          <label className="block text-neutral-700 text-sm font-bold mb-2" htmlFor="description">
             Description *
           </label>
           <textarea
@@ -100,14 +101,14 @@ const TaskForm = ({ addTask, updateTask, task, groups, onCancel }) => {
             name="description"
             value={description}
             onChange={handleChange}
-            className={`input h-24 ${errors.description ? 'border-red-500' : ''}`}
+            className={`input h-24 ${errors.description ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''}`}
             placeholder="Task description"
           ></textarea>
           {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description}</p>}
         </div>
         
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="resourceLink">
+          <label className="block text-neutral-700 text-sm font-bold mb-2" htmlFor="resourceLink">
             Resource Link (Optional)
           </label>
           <input
@@ -122,7 +123,7 @@ const TaskForm = ({ addTask, updateTask, task, groups, onCancel }) => {
         </div>
         
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="tags">
+          <label className="block text-neutral-700 text-sm font-bold mb-2" htmlFor="tags">
             Tags (Optional)
           </label>
           <input
@@ -134,55 +135,55 @@ const TaskForm = ({ addTask, updateTask, task, groups, onCancel }) => {
             className="input"
             placeholder="important, project X (comma separated)"
           />
-          <p className="text-gray-500 text-xs mt-1">Separate tags with commas</p>
+          <p className="text-neutral-500 text-xs mt-1">Separate tags with commas</p>
         </div>
         
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
+          <label className="block text-neutral-700 text-sm font-bold mb-2">
             Access Level
           </label>
-          <div className="flex space-x-4">
-            <label className="inline-flex items-center">
+          <div className="grid grid-cols-3 gap-2">
+            <label className="bg-white border border-neutral-300 rounded-md px-3 py-2 flex items-center cursor-pointer transition-colors hover:bg-neutral-50">
               <input
                 type="radio"
                 name="accessLevel"
                 value="private"
                 checked={accessLevel === 'private'}
                 onChange={handleChange}
-                className="form-radio h-4 w-4 text-primary-600"
+                className="form-radio h-4 w-4 text-primary-600 mr-2"
               />
-              <span className="ml-2 text-gray-700">Private</span>
+              <span className="text-neutral-700">Private</span>
             </label>
             
-            <label className="inline-flex items-center">
+            <label className="bg-white border border-neutral-300 rounded-md px-3 py-2 flex items-center cursor-pointer transition-colors hover:bg-neutral-50">
               <input
                 type="radio"
                 name="accessLevel"
                 value="group"
                 checked={accessLevel === 'group'}
                 onChange={handleChange}
-                className="form-radio h-4 w-4 text-primary-600"
+                className="form-radio h-4 w-4 text-primary-600 mr-2"
               />
-              <span className="ml-2 text-gray-700">Group</span>
+              <span className="text-neutral-700">Group</span>
             </label>
             
-            <label className="inline-flex items-center">
+            <label className="bg-white border border-neutral-300 rounded-md px-3 py-2 flex items-center cursor-pointer transition-colors hover:bg-neutral-50">
               <input
                 type="radio"
                 name="accessLevel"
                 value="public"
                 checked={accessLevel === 'public'}
                 onChange={handleChange}
-                className="form-radio h-4 w-4 text-primary-600"
+                className="form-radio h-4 w-4 text-primary-600 mr-2"
               />
-              <span className="ml-2 text-gray-700">Public</span>
+              <span className="text-neutral-700">Public</span>
             </label>
           </div>
         </div>
         
         {accessLevel === 'group' && (
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="sharedWith">
+            <label className="block text-neutral-700 text-sm font-bold mb-2" htmlFor="sharedWith">
               Share with Group *
             </label>
             <select
@@ -190,8 +191,8 @@ const TaskForm = ({ addTask, updateTask, task, groups, onCancel }) => {
               name="sharedWith"
               value={sharedWith}
               onChange={handleChange}
-              className={`w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 ${
-                errors.sharedWith ? 'border-red-500' : ''
+              className={`w-full border border-neutral-300 rounded-md shadow-sm px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 ${
+                errors.sharedWith ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''
               }`}
             >
               <option value="">Select a group</option>

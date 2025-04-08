@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { FaPlus, FaFilter } from 'react-icons/fa';
+import { FaPlus, FaFilter, FaTasks, FaUsers, FaCheckCircle, FaClock } from 'react-icons/fa';
 import TaskList from '../components/tasks/TaskList';
 import TaskForm from '../components/tasks/TaskForm';
 import GroupList from '../components/groups/GroupList';
@@ -101,39 +101,85 @@ const Dashboard = () => {
     return true;
   });
 
+  // Calculate stats
+  const completedTasks = tasks.filter(task => task.completed).length;
+  const pendingTasks = tasks.filter(task => !task.completed).length;
+  const completionRate = tasks.length > 0 ? Math.round((completedTasks / tasks.length) * 100) : 0;
+
   return (
     <div>
-      <div className="mb-8">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
-          <div className="flex space-x-2">
-            <button
-              onClick={() => setActiveTab('tasks')}
-              className={`btn ${activeTab === 'tasks' ? 'btn-primary' : 'btn-secondary'}`}
-            >
-              Tasks
-            </button>
-            <button
-              onClick={() => setActiveTab('groups')}
-              className={`btn ${activeTab === 'groups' ? 'btn-primary' : 'btn-secondary'}`}
-            >
-              Groups
-            </button>
+      <h1 className="text-3xl font-bold text-neutral-800 mb-8">Dashboard</h1>
+      
+      {/* Stats Section */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="card bg-gradient-to-br from-primary-50 to-primary-100 border-l-4 border-primary-500">
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-primary-700 text-sm font-medium">Total Tasks</p>
+              <h3 className="text-3xl font-bold text-primary-900">{tasks.length}</h3>
+            </div>
+            <div className="p-3 bg-primary-500 rounded-lg text-white">
+              <FaTasks size={24} />
+            </div>
           </div>
         </div>
+        
+        <div className="card bg-gradient-to-br from-secondary-50 to-secondary-100 border-l-4 border-secondary-500">
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-secondary-700 text-sm font-medium">Completed</p>
+              <h3 className="text-3xl font-bold text-secondary-900">{completedTasks}</h3>
+            </div>
+            <div className="p-3 bg-secondary-500 rounded-lg text-white">
+              <FaCheckCircle size={24} />
+            </div>
+          </div>
+        </div>
+        
+        <div className="card bg-gradient-to-br from-amber-50 to-amber-100 border-l-4 border-amber-500">
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-amber-700 text-sm font-medium">Pending</p>
+              <h3 className="text-3xl font-bold text-amber-900">{pendingTasks}</h3>
+            </div>
+            <div className="p-3 bg-amber-500 rounded-lg text-white">
+              <FaClock size={24} />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tabs Navigation */}
+      <div className="flex border-b border-neutral-200 mb-6">
+        <button
+          onClick={() => setActiveTab('tasks')}
+          className={`py-2 px-4 font-medium text-sm ${activeTab === 'tasks' 
+            ? 'text-primary-600 border-b-2 border-primary-500' 
+            : 'text-neutral-500 hover:text-neutral-700'}`}
+        >
+          <FaTasks className="inline mr-2" /> Tasks
+        </button>
+        <button
+          onClick={() => setActiveTab('groups')}
+          className={`py-2 px-4 font-medium text-sm ${activeTab === 'groups' 
+            ? 'text-primary-600 border-b-2 border-primary-500' 
+            : 'text-neutral-500 hover:text-neutral-700'}`}
+        >
+          <FaUsers className="inline mr-2" /> Groups
+        </button>
       </div>
 
       {activeTab === 'tasks' && (
         <div className="mb-6">
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center">
-              <h2 className="text-xl font-semibold text-gray-700">My Tasks</h2>
+              <h2 className="text-xl font-semibold text-neutral-700">My Tasks</h2>
               <div className="ml-4 flex items-center">
-                <FaFilter className="text-gray-500 mr-2" />
+                <FaFilter className="text-neutral-500 mr-2" />
                 <select
                   value={filter}
                   onChange={(e) => setFilter(e.target.value)}
-                  className="border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
+                  className="border-neutral-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
                 >
                   <option value="all">All</option>
                   <option value="completed">Completed</option>
@@ -181,7 +227,7 @@ const Dashboard = () => {
       {activeTab === 'groups' && (
         <div>
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold text-gray-700">My Groups</h2>
+            <h2 className="text-xl font-semibold text-neutral-700">My Groups</h2>
             <button
               onClick={() => setShowGroupForm(!showGroupForm)}
               className="btn btn-primary flex items-center"

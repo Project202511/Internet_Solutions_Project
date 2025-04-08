@@ -1,147 +1,199 @@
-<<<<<<< HEAD
-# 🗂️ Project Management App
+SyncUp - Collaborative Task Management Platform
+SyncUp is a full-stack web application built with the MERN stack (MongoDB, Express.js, React, Node.js) that enables efficient collaboration through shared tasks and group management. It features a clean, responsive UI built with Tailwind CSS.
+Show Image
+Features
 
-A full-stack task management application built with **React**, **Node.js**, **Express**, and **MongoDB**, featuring a simple authentication system using **bcryptjs**.
+User Authentication: Secure registration and login system
+Task Management: Create, read, update, delete, and mark tasks as complete
+Task Privacy Levels: Set tasks as private, group-shared, or public
+Resource Links: Attach URLs to tasks for context and references
+Task Tags: Categorize tasks with custom tags for better organization
+Group Management: Create groups to collaborate with specific team members
+Responsive Design: Fully compatible with desktop and mobile devices
+User-friendly UI: Modern interface with notifications and real-time feedback
 
----
+Prerequisites
 
-## 📁 Project Structure
+Node.js (v14.0.0 or higher)
+npm or yarn
+MongoDB (local installation or MongoDB Atlas account)
+Git
 
-```
-project-management-app/
-├── client/       # React frontend
-├── server/       # Express backend with MongoDB
-└── README.md
-```
+Installation
+Clone the Repository
+bashCopygit clone https://github.com/yourusername/syncup.git
+cd syncup
+Backend Setup
 
----
+Navigate to the backend directory:
 
-## 🚀 Getting Started
+bashCopycd backend
 
-### 🔧 Prerequisites
+Install dependencies:
 
-- Node.js (v14+)
-- MongoDB installed and running locally (or MongoDB Atlas for cloud)
-- Git
+bashCopynpm install
 
----
+Create a .env file in the backend directory with the following content:
 
-## 🔙 Backend Setup (`server/`)
+CopyNODE_ENV=development
+PORT=5000
+MONGO_URI=mongodb://localhost:27017/syncup
+# For production, use your MongoDB Atlas URI
+# MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/syncup
+JWT_SECRET=your_jwt_secret_key_here
+FRONTEND_URL=http://localhost:3000
+Replace your_jwt_secret_key_here with a strong random string for security.
 
-### 1. Install dependencies
+Start the backend server:
 
-```bash
-cd server
-npm install
-```
+bashCopy# Development mode with auto-reload
+npm run dev
 
-### 2. Configure MongoDB connection
-
-If you're using **MongoDB locally**, no changes needed.  
-If you're using **MongoDB Atlas**, update the URI in `server/index.js`:
-
-```js
-mongoose.connect("mongodb+srv://<user>:<password>@cluster.mongodb.net/pm_app");
-```
-
-> 🔐 You can also use a `.env` file and `dotenv` package to manage secrets.
-
-### 3. Start the backend server
-
-```bash
-node index.js
-```
-
-Runs on: `http://localhost:5000`
-
----
-
-## 🖥️ Frontend Setup (`client/`)
-
-### 1. Install dependencies
-
-```bash
-cd client
-npm install
-```
-
-### 2. Start the React app
-
-```bash
+# OR Production mode
 npm start
-```
+The backend server will run on http://localhost:5000
+Frontend Setup
 
-Runs on: `http://localhost:3000`
+Open a new terminal and navigate to the frontend directory:
 
----
+bashCopycd frontend
 
-## 🔐 Authentication (bcrypt-based)
+Install dependencies:
 
-The app features a simple login/register system:
+bashCopynpm install
 
-- `/register`: Create new user with hashed password
-- `/login`: Compare password using bcrypt
-- On successful login, the task board is unlocked
+Start the frontend development server:
 
----
+bashCopynpm start
+The frontend application will open in your browser at http://localhost:3000
+Project Structure
+Copysyncup/
+├── backend/                  # Backend code
+│   ├── config/               # Configuration files
+│   │   └── db.js             # Database connection
+│   ├── controllers/          # Route controllers
+│   │   ├── authController.js
+│   │   ├── groupController.js
+│   │   └── taskController.js
+│   ├── middleware/           # Custom middleware
+│   │   └── authMiddleware.js
+│   ├── models/               # Database models
+│   │   ├── User.js
+│   │   ├── Task.js
+│   │   └── Group.js
+│   ├── routes/               # API routes
+│   │   ├── authRoutes.js
+│   │   ├── groupRoutes.js
+│   │   └── taskRoutes.js
+│   ├── .env                  # Environment variables
+│   ├── package.json
+│   └── server.js             # Entry point
+│
+└── frontend/                 # Frontend code
+    ├── public/               # Static files
+    ├── src/
+    │   ├── components/       # Reusable components
+    │   │   ├── auth/         # Authentication components
+    │   │   ├── groups/       # Group management components
+    │   │   ├── layout/       # Layout components
+    │   │   └── tasks/        # Task management components
+    │   ├── context/          # React context providers
+    │   │   ├── AuthContext.js
+    │   │   └── NotificationContext.js
+    │   ├── pages/            # Page components
+    │   │   ├── Dashboard.js
+    │   │   ├── GroupDetails.js
+    │   │   ├── GroupsPage.js
+    │   │   ├── Login.js
+    │   │   ├── Register.js
+    │   │   ├── TaskDetails.js
+    │   │   └── TasksPage.js
+    │   ├── App.js            # Main component
+    │   └── index.js          # Entry point
+    └── package.json
+API Endpoints
+Authentication
 
-## 🧪 Testing the App
+POST /api/auth/register - Register a new user
+POST /api/auth/login - Login a user
+POST /api/auth/logout - Logout a user
+GET /api/auth/profile - Get user profile
 
-1. Start **MongoDB** server locally:
-   ```bash
-   mongod
-   ```
-2. Run the backend:
-   ```bash
-   cd server
-   node index.js
-   ```
-3. Run the frontend:
-   ```bash
-   cd client
-   npm start
-   ```
+Tasks
 
-Visit `http://localhost:3000`, register or login, then create/manage tasks.
+GET /api/tasks - Get all accessible tasks
+GET /api/tasks/:id - Get task by ID
+POST /api/tasks - Create a new task
+PUT /api/tasks/:id - Update a task
+DELETE /api/tasks/:id - Delete a task
+PATCH /api/tasks/:id/complete - Toggle task completion status
 
----
+Groups
 
-## ✨ Features
+GET /api/groups - Get all user's groups
+GET /api/groups/:id - Get group by ID
+POST /api/groups - Create a new group
+PUT /api/groups/:id - Update a group
+DELETE /api/groups/:id - Delete a group
+POST /api/groups/:id/members - Add a member to a group
+DELETE /api/groups/:id/members/:userId - Remove a member from a group
 
-- 👥 User registration and login (no duplicate usernames)
-- ✅ Add, view, and update tasks
-- 📊 Kanban-style board (`TO DO`, `IN PROGRESS`, `DONE`)
-- 🧩 Built with Tailwind CSS for a modern UI
+Usage Guide
 
----
+Registration & Login
 
-## 🛠️ Tech Stack
+Create a new account or log in with existing credentials
 
-- **Frontend**: React, Axios, Tailwind CSS
-- **Backend**: Express.js, Mongoose
-- **Database**: MongoDB
-- **Auth**: bcryptjs
 
----
+Dashboard
 
-## 📌 Future Improvements
+View summary information and recent activity
+Quick navigation to tasks and groups
 
-- JWT authentication for route protection
-- User-specific tasks
-- Due dates, priority, and assignee fields
-- Drag & drop support (React DnD or similar)
 
----
+Managing Tasks
 
-## 🤝 Contributing
+Create tasks with title, description, optional resource link, and tags
+Set privacy level (private, group, public)
+Filter tasks by completion status
+Mark tasks as complete when finished
 
-Pull requests are welcome! For major changes, open an issue first to discuss what you’d like to change.
 
----
+Group Collaboration
 
-## 📝 License
+Create groups for teams or projects
+Add members by email address
+Share tasks with specific groups
+Manage group membership
 
-This project is licensed under the MIT License.
-=======
-# Project-collab-tool
->>>>>>> 3bff548 (Integrating both backend and frontend)
+
+
+Technologies Used
+
+Frontend:
+
+React
+React Router
+Axios
+Tailwind CSS
+React Icons
+
+
+Backend:
+
+Node.js
+Express.js
+MongoDB
+Mongoose
+JSON Web Tokens (JWT)
+bcryptjs
+
+
+
+Contributing
+
+Fork the repository
+Create your feature branch: git checkout -b feature/amazing-feature
+Commit your changes: git commit -m 'Add some amazing feature'
+Push to the branch: git push origin feature/amazing-feature
+Open a Pull Request

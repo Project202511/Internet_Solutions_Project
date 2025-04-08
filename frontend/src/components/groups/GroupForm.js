@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaTimes } from 'react-icons/fa';
+import { FaTimes, FaUsers, FaEdit } from 'react-icons/fa';
 
 const GroupForm = ({ addGroup, updateGroup, group, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -45,14 +45,15 @@ const GroupForm = ({ addGroup, updateGroup, group, onCancel }) => {
   };
   
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="bg-white rounded-lg shadow-md p-6 border border-neutral-200">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold text-gray-800">
+        <h3 className="text-lg font-semibold text-neutral-800 flex items-center">
+          {group ? <FaEdit className="mr-2" /> : <FaUsers className="mr-2" />}
           {group ? 'Edit Group' : 'Create New Group'}
         </h3>
         <button 
           onClick={onCancel}
-          className="text-gray-500 hover:text-gray-700"
+          className="text-neutral-500 hover:text-neutral-700 p-1 rounded-full hover:bg-neutral-100"
         >
           <FaTimes />
         </button>
@@ -60,7 +61,7 @@ const GroupForm = ({ addGroup, updateGroup, group, onCancel }) => {
       
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+          <label className="block text-neutral-700 text-sm font-bold mb-2" htmlFor="name">
             Group Name *
           </label>
           <input
@@ -69,14 +70,14 @@ const GroupForm = ({ addGroup, updateGroup, group, onCancel }) => {
             name="name"
             value={name}
             onChange={handleChange}
-            className={`input ${errors.name ? 'border-red-500' : ''}`}
+            className={`input ${errors.name ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''}`}
             placeholder="Enter group name"
           />
           {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
         </div>
         
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
+          <label className="block text-neutral-700 text-sm font-bold mb-2" htmlFor="description">
             Description (Optional)
           </label>
           <textarea

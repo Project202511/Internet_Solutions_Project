@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { FaArrowLeft, FaCheck, FaTrash } from 'react-icons/fa';
+import { FaArrowLeft, FaCheck, FaTrash, FaEdit, FaLink, FaTag, FaUser, FaCalendarAlt, FaUsers } from 'react-icons/fa';
 import TaskForm from '../components/tasks/TaskForm';
 
 const TaskDetails = () => {
@@ -17,12 +17,19 @@ const TaskDetails = () => {
     const fetchTaskAndGroups = async () => {
       setLoading(true);
       try {
+        // Fetch task and groups in parallel
         const taskPromise = axios.get(`/tasks/${id}`);
         const groupsPromise = axios.get('/groups');
+        
         const [taskRes, groupsRes] = await Promise.all([taskPromise, groupsPromise]);
-
-        if (taskRes.data) setTask(taskRes.data);
-        if (groupsRes.data) setGroups(groupsRes.data);
+        
+        if (taskRes.data) {
+          setTask(taskRes.data);
+        }
+        
+        if (groupsRes.data) {
+          setGroups(groupsRes.data);
+        }
       } catch (err) {
         console.error('Error fetching data:', err);
         setError(err.response?.data?.message || 'Failed to fetch task details');
@@ -77,11 +84,11 @@ const TaskDetails = () => {
 
   if (error) {
     return (
-      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+      <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded">
         <p className="font-medium">Error:</p>
         <p>{error}</p>
-        <button
-          onClick={() => navigate('/dashboard')}
+        <button 
+          onClick={() => navigate('/dashboard')} 
           className="mt-3 text-red-700 underline hover:no-underline"
         >
           Return to Dashboard
@@ -92,10 +99,10 @@ const TaskDetails = () => {
 
   if (!task) {
     return (
-      <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded">
+      <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded">
         <p className="font-medium">Task not found</p>
-        <button
-          onClick={() => navigate('/dashboard')}
+        <button 
+          onClick={() => navigate('/dashboard')} 
           className="mt-3 text-yellow-700 underline hover:no-underline"
         >
           Return to Dashboard
@@ -121,80 +128,83 @@ const TaskDetails = () => {
           onCancel={() => setIsEditing(false)}
         />
       ) : (
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="flex items-start justify-between mb-4">
+        <div className="bg-white rounded-lg shadow-md p-6 border border-neutral-200">
+          <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-gray-800 mb-2">
-                {task.title || 'Untitled Task'}
-              </h1>
-              <div className="flex items-center space-x-2 mb-4">
+              <h1 className="text-2xl font-bold text-neutral-800 mb-3">{task.title}</h1>
+              <div className="flex flex-wrap items-center gap-2 mb-4">
                 <span
-                  className={`px-2 py-1 text-xs rounded ${
+                  className={`px-3 py-1 rounded-full text-sm font-medium flex items-center ${
                     task.completed
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-yellow-100 text-yellow-800'
+                      ? 'bg-secondary-100 text-secondary-800'
+                      : 'bg-amber-100 text-amber-800'
                   }`}
                 >
+                  <FaCheck className="mr-1" />
                   {task.completed ? 'Completed' : 'Pending'}
                 </span>
                 <span
-                  className={`px-2 py-1 text-xs rounded ${
+                  className={`px-3 py-1 rounded-full text-sm font-medium ${
                     task.accessLevel === 'private'
-                      ? 'bg-gray-100 text-gray-800'
+                      ? 'bg-neutral-100 text-neutral-800'
                       : task.accessLevel === 'group'
-                      ? 'bg-purple-100 text-purple-800'
-                      : 'bg-blue-100 text-blue-800'
+                      ? 'bg-accent-100 text-accent-800'
+                      : 'bg-primary-100 text-primary-800'
                   }`}
                 >
                   {task.accessLevel.charAt(0).toUpperCase() + task.accessLevel.slice(1)}
                 </span>
                 {task.accessLevel === 'group' && task.sharedWith && (
-                  <span className="px-2 py-1 text-xs bg-indigo-100 text-indigo-800 rounded">
-                    Group: {task.sharedWith.name}
+                  <span className="px-3 py-1 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800 flex items-center">
+                    <FaUsers className="mr-1" />
+                    {task.sharedWith.name}
                   </span>
                 )}
               </div>
             </div>
-            <div className="flex space-x-2">
+            <div className="flex space-x-2 mt-4 md:mt-0">
               <button
                 onClick={completeTask}
-                className={`p-2 rounded-full ${
+                className={`btn ${
                   task.completed
-                    ? 'bg-green-100 text-green-600 hover:bg-green-200'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
+                    ? 'btn-secondary'
+                    : 'btn-success'
+                } flex items-center`}
                 title={task.completed ? 'Mark as incomplete' : 'Mark as complete'}
               >
-                <FaCheck size={14} />
+                <FaCheck className="mr-2" />
+                {task.completed ? 'Mark Incomplete' : 'Mark Complete'}
               </button>
               <button
                 onClick={() => setIsEditing(true)}
-                className="btn btn-primary"
+                className="btn btn-primary flex items-center"
               >
-                Edit
+                <FaEdit className="mr-2" /> Edit
               </button>
               <button
                 onClick={deleteTask}
-                className="btn btn-danger"
+                className="btn btn-danger flex items-center"
               >
-                <FaTrash className="mr-1" /> Delete
+                <FaTrash className="mr-2" /> Delete
               </button>
             </div>
           </div>
 
-          <div className="mb-6">
-            <h3 className="text-lg font-semibold mb-2">Description</h3>
-            <p className="text-gray-700 whitespace-pre-line">{task.description}</p>
+          <div className="bg-neutral-50 p-4 rounded-lg mb-6">
+            <h3 className="text-lg font-semibold mb-3 text-neutral-700">Description</h3>
+            <p className="text-neutral-700 whitespace-pre-line">{task.description}</p>
           </div>
 
           {task.resourceLink && (
-            <div className="mb-6">
-              <h3 className="text-lg font-semibold mb-2">Resource</h3>
+            <div className="mb-6 p-4 border border-neutral-200 rounded-lg">
+              <h3 className="text-lg font-semibold mb-2 text-neutral-700 flex items-center">
+                <FaLink className="mr-2 text-primary-500" /> Resource Link
+              </h3>
               <a
                 href={task.resourceLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-primary-600 hover:text-primary-800 underline"
+                className="text-primary-600 hover:text-primary-800 underline break-all"
               >
                 {task.resourceLink}
               </a>
@@ -203,12 +213,14 @@ const TaskDetails = () => {
 
           {task.tags && task.tags.length > 0 && (
             <div className="mb-6">
-              <h3 className="text-lg font-semibold mb-2">Tags</h3>
+              <h3 className="text-lg font-semibold mb-3 text-neutral-700 flex items-center">
+                <FaTag className="mr-2 text-neutral-500" /> Tags
+              </h3>
               <div className="flex flex-wrap gap-2">
                 {task.tags.map((tag, index) => (
                   <span
                     key={index}
-                    className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
+                    className="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm"
                   >
                     {tag}
                   </span>
@@ -217,15 +229,25 @@ const TaskDetails = () => {
             </div>
           )}
 
-          <div className="border-t pt-4 text-sm text-gray-500">
-            {task.createdBy?.name && <p>Created by: {task.createdBy.name}</p>}
-            {task.createdAt && (
-              <p>Created: {new Date(task.createdAt).toLocaleString()}</p>
+          <div className="border-t border-neutral-200 pt-4 mt-6 text-sm text-neutral-500 grid grid-cols-1 md:grid-cols-2 gap-2">
+            {task.createdBy && (
+              <div className="flex items-center">
+                <FaUser className="mr-2 text-neutral-400" />
+                <span>Created by: {task.createdBy.name || 'Unknown user'}</span>
+              </div>
             )}
-            {task.updatedAt &&
-              task.updatedAt !== task.createdAt && (
-                <p>Last updated: {new Date(task.updatedAt).toLocaleString()}</p>
-              )}
+            {task.createdAt && (
+              <div className="flex items-center">
+                <FaCalendarAlt className="mr-2 text-neutral-400" />
+                <span>Created: {new Date(task.createdAt).toLocaleString()}</span>
+              </div>
+            )}
+            {task.updatedAt && task.createdAt && task.updatedAt !== task.createdAt && (
+              <div className="flex items-center col-span-full">
+                <FaCalendarAlt className="mr-2 text-neutral-400" />
+                <span>Last updated: {new Date(task.updatedAt).toLocaleString()}</span>
+              </div>
+            )}
           </div>
         </div>
       )}
