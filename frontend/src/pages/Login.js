@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import { FaLock, FaEnvelope, FaArrowRight } from 'react-icons/fa';
+import Logo from '../images/logo.icon.png';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -40,7 +41,12 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-neutral-50 px-4">
       <div className="w-full max-w-md">
-        <div className="text-center mb-10">
+      <div className="text-center mb-10">
+          <img 
+            src={Logo} 
+            alt="SyncUp Logo" 
+            className="mx-auto h-20 w-20 mb-4" 
+          />
           <h1 className="text-4xl font-bold text-primary-600 mb-2">SyncUp</h1>
           <p className="text-neutral-600">Sign in to manage your tasks</p>
         </div>

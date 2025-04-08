@@ -7,6 +7,9 @@ import {
   FaChevronLeft, FaChevronRight, FaTachometerAlt
 } from 'react-icons/fa';
 
+// Import the logo
+import logoIcon from '../../images/logo.icon.png';
+
 const Layout = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false);
   const { user, logout } = useContext(AuthContext);
@@ -23,8 +26,22 @@ const Layout = ({ children }) => {
       {/* Sidebar */}
       <div className={`bg-white shadow-md z-10 transition-all duration-300 ${collapsed ? 'w-16' : 'w-64'}`}>
         <div className="flex items-center justify-between h-16 px-4 border-b border-neutral-200">
-          {!collapsed && (
-            <h1 className="text-xl font-bold text-primary-600">SyncUp</h1>
+          {!collapsed ? (
+            <div className="flex items-center">
+              {/* Use the imported logo */}
+              <img 
+                src={logoIcon} 
+                alt="SyncUp Logo" 
+                className="h-10 w-10 mr-2" 
+              />
+              <h1 className="text-xl font-bold text-neutral-800">SyncUp</h1>
+            </div>
+          ) : (
+            <img 
+              src={logoIcon} 
+              alt="SyncUp Logo" 
+              className="h-8 w-8 mx-auto" 
+            />
           )}
           <button 
             onClick={() => setCollapsed(!collapsed)}
@@ -34,6 +51,7 @@ const Layout = ({ children }) => {
           </button>
         </div>
         
+        {/* Rest of your component remains the same */}
         <div className="py-4">
           <nav>
             <ul className="space-y-1 px-2">
