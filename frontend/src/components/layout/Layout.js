@@ -91,36 +91,38 @@ const Layout = ({ children }) => {
             </ul>
           </nav>
         </div>
-        
-        <div className={`absolute bottom-0 left-0 right-0 p-4 border-t border-neutral-200 ${collapsed ? 'text-center' : ''}`}>
-          {!collapsed ? (
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <FaUserCircle className="text-neutral-500 text-xl mr-2" />
-                <div>
-                  <p className="text-sm font-medium text-neutral-800">{user?.name}</p>
-                  <p className="text-xs text-neutral-500 truncate">{user?.email}</p>
-                </div>
-              </div>
-              <button
-                onClick={handleLogout}
-                className="text-neutral-500 hover:text-red-500"
-              >
-                <FaSignOutAlt />
-              </button>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center space-y-4">
-              <FaUserCircle className="text-neutral-500 text-xl" />
-              <button
-                onClick={handleLogout}
-                className="text-neutral-500 hover:text-red-500"
-              >
-                <FaSignOutAlt />
-              </button>
-            </div>
-          )}
+        {/* Footer Section */}
+<div className={`absolute bottom-0 left-0 right-0 p-3 border-t border-neutral-200 bg-white shadow-sm ${collapsed ? 'text-center' : ''}`}>
+  {!collapsed ? (
+    <div className="flex items-center justify-between">
+      <div className="flex items-center">
+        <FaUserCircle className="text-neutral-500 text-lg mr-2" />
+        <div>
+          <p className="text-sm font-medium text-neutral-800">{user?.name}</p>
+          <p className="text-xs text-neutral-500 truncate max-w-[150px]">{user?.email}</p>
         </div>
+      </div>
+      <button
+        onClick={handleLogout}
+        className="text-neutral-500 hover:text-red-500"
+        title="Logout"
+      >
+        <FaSignOutAlt />
+      </button>
+    </div>
+  ) : (
+    <div className="flex flex-col items-center space-y-3">
+      <FaUserCircle className="text-neutral-500 text-lg" />
+      <button
+        onClick={handleLogout}
+        className="text-neutral-500 hover:text-red-500"
+        title="Logout"
+      >
+        <FaSignOutAlt />
+      </button>
+    </div>
+  )}
+</div>
       </div>
       
       {/* Main Content */}
