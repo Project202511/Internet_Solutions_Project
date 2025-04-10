@@ -51,11 +51,9 @@ Create a `.env` file in the `backend` directory:
 ```
 NODE_ENV=development
 PORT=5000
-MONGO_URI=mongodb://localhost:27017/syncup
-# For production:
-# MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/syncup
-JWT_SECRET=your_jwt_secret_key_here
+MONGO_URI=mongodb+srv://SyncUpdb:SyncUp%40123@syncup.uwbpzoi.mongodb.net/?retryWrites=true&w=majority&appName=SyncUpJWT_SECRET=harshal@123
 FRONTEND_URL=http://localhost:3000
+JWT_SECRET=harshal@123
 ```
 
 Start the backend server:
