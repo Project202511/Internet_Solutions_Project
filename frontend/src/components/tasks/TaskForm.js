@@ -2,18 +2,29 @@ import React, { useState } from 'react';
 import { FaTimes, FaEdit, FaClipboardList } from 'react-icons/fa';
 
 const TaskForm = ({ addTask, updateTask, task, groups, onCancel }) => {
+  // Helper function for priority colors
+  const getPriorityColor = (priority) => {
+    switch(priority) {
+      case 'Low': return 'bg-blue-400 hover:bg-blue-500';
+      case 'High': return 'bg-red-500 hover:bg-red-600';
+      case 'Medium':
+      default: return 'bg-yellow-500 hover:bg-yellow-600';
+    }
+  };
+
   const [formData, setFormData] = useState({
     title: task?.title || '',
     description: task?.description || '',
     resourceLink: task?.resourceLink || '',
     tags: task?.tags?.join(', ') || '',
     accessLevel: task?.accessLevel || 'private',
-    sharedWith: task?.sharedWith?._id || ''
+    sharedWith: task?.sharedWith?._id || '',
+    priority: task?.priority || 'Medium', // Default to medium priority
   });
   
   const [errors, setErrors] = useState({});
   
-  const { title, description, resourceLink, tags, accessLevel, sharedWith } = formData;
+  const { title, description, resourceLink, tags, accessLevel, sharedWith, priority } = formData;
   
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -50,7 +61,8 @@ const TaskForm = ({ addTask, updateTask, task, groups, onCancel }) => {
       resourceLink,
       tags: tagsArray,
       accessLevel,
-      sharedWith: accessLevel === 'group' ? sharedWith : null
+      sharedWith: accessLevel === 'group' ? sharedWith : null,
+      priority // Include priority in the task data
     };
     
     if (task) {
@@ -105,6 +117,31 @@ const TaskForm = ({ addTask, updateTask, task, groups, onCancel }) => {
             placeholder="Task description"
           ></textarea>
           {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description}</p>}
+        </div>
+        
+        {/* Priority Level Selection */}
+        <div className="mb-4">
+          <label className="block text-neutral-700 text-sm font-bold mb-2">
+            Priority Level
+          </label>
+          <div className="flex space-x-2">
+            {['Low', 'Medium', 'High'].map((value) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => setFormData({ ...formData, priority: value })}
+                className={`flex-1 py-2 rounded-md text-white font-medium transition-colors ${
+                  formData.priority === value
+                    ? getPriorityColor(value) + ' ring-2 ring-offset-2 ring-' + (
+                        value === 'High' ? 'red' : 
+                        value === 'Low' ? 'blue' : 'yellow') + '-400'
+                    : 'bg-gray-300 hover:bg-gray-400'
+                }`}
+              >
+                {value}
+              </button>
+            ))}
+          </div>
         </div>
         
         <div className="mb-4">

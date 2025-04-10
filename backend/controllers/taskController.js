@@ -6,7 +6,7 @@ const Group = require('../models/Group');
 // @access  Private
 const createTask = async (req, res) => {
   try {
-    const { title, description, resourceLink, tags, accessLevel, sharedWith } = req.body;
+    const { title, description, resourceLink, tags, accessLevel, sharedWith, priority } = req.body;
 
     // Validate sharedWith if accessLevel is group
     if (accessLevel === 'group' && sharedWith) {
@@ -29,6 +29,7 @@ const createTask = async (req, res) => {
       tags: tags || [],
       accessLevel: accessLevel || 'private',
       sharedWith: accessLevel === 'group' ? sharedWith : null,
+      priority: priority || 'Medium', // Default to medium if not specified
       createdBy: req.user._id,
     });
 

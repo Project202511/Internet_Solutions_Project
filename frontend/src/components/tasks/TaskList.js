@@ -3,6 +3,16 @@ import { Link } from 'react-router-dom';
 import { FaCheck, FaTrash, FaEdit, FaLink, FaTag } from 'react-icons/fa';
 
 const TaskList = ({ tasks, completeTask, deleteTask }) => {
+  // Helper function for priority colors
+  const getPriorityColor = (priority) => {
+    switch(priority) {
+      case 'Low': return 'bg-blue-400';
+      case 'High': return 'bg-red-500';
+      case 'Medium':
+      default: return 'bg-yellow-500';
+    }
+  };
+
   if (tasks.length === 0) {
     return (
       <div className="bg-white rounded-lg shadow-md p-6 text-center">
@@ -21,11 +31,14 @@ const TaskList = ({ tasks, completeTask, deleteTask }) => {
           }`}
         >
           <div className="flex flex-col h-full">
-            <div className="flex justify-between items-start mb-2">
+            <div className="flex items-center mb-1">
+              <div className={`px-2 py-0.5 rounded-full text-xs text-white font-medium mr-2 ${getPriorityColor(task.priority || 'Medium')}`}>
+                {task.priority || 'Medium'}
+              </div>
               <h3 className={`text-lg font-semibold ${task.completed ? 'line-through text-neutral-500' : 'text-neutral-800'}`}>
                 {task.title}
               </h3>
-              <div className="flex space-x-1">
+              <div className="flex space-x-1 ml-auto">
                 <button
                   onClick={() => completeTask(task._id)}
                   className={`p-1.5 rounded-full ${

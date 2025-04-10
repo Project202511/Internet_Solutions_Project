@@ -13,6 +13,16 @@ const TaskDetails = () => {
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
 
+  // Helper function for priority colors
+  const getPriorityColor = (priority) => {
+    switch(priority) {
+      case 'Low': return 'bg-blue-400';
+      case 'High': return 'bg-red-500';
+      case 'Medium':
+      default: return 'bg-yellow-500';
+    }
+  };
+
   useEffect(() => {
     const fetchTaskAndGroups = async () => {
       setLoading(true);
@@ -131,7 +141,12 @@ const TaskDetails = () => {
         <div className="bg-white rounded-lg shadow-md p-6 border border-neutral-200">
           <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-neutral-800 mb-3">{task.title}</h1>
+              <div className="flex items-center mb-3">
+                <h1 className="text-2xl font-bold text-neutral-800 mr-3">{task.title}</h1>
+                <div className={`px-3 py-1 rounded-full flex items-center text-white text-sm font-medium ${getPriorityColor(task.priority || 'Medium')}`}>
+                  {task.priority || 'Medium'} Priority
+                </div>
+              </div>
               <div className="flex flex-wrap items-center gap-2 mb-4">
                 <span
                   className={`px-3 py-1 rounded-full text-sm font-medium flex items-center ${

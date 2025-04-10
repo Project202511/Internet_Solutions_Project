@@ -14,7 +14,12 @@ const taskSchema = mongoose.Schema(
     resourceLink: {
       type: String,
     },
-    tags: [
+    priority: {
+      type: String,
+      enum: ['Low', 'Medium', 'High'],
+      default: 'Medium', // Medium priority by defaul
+    },
+      tags: [
       {
         type: String,
         trim: true,
