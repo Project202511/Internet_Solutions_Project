@@ -8,19 +8,19 @@ const cookieParser = require('cookie-parser');
 const connectDB = require('./config/db');
 
 // Load environment variables from .env file
-dotenv.config(); // ✅ Better to use dotenv.config() directly instead of require().config()
+dotenv.config();
 
 // Connect to MongoDB Atlas using Mongoose
-connectDB(); // ✅ Make sure this function reads MONGO_URI from process.env
+connectDB();
 
 // Initialize the Express app
 const app = express();
 
 // Middleware configuration
 
-// CORS setup to allow frontend requests (adjust origin in .env if needed)
+// CORS setup to allow frontend requests from both ports
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000', // Allows frontend to connect
+  origin: ['http://localhost:3000', 'http://localhost:3001'], // Allow both ports
   credentials: true // Allows sending cookies from client
 }));
 

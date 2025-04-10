@@ -9,9 +9,11 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Configure axios 
-  axios.defaults.baseURL = 'http://localhost:5000/api';
-  axios.defaults.withCredentials = true; // For cookies
+  // Configure axios
+  useEffect(() => {
+    axios.defaults.baseURL = 'http://localhost:5000/api';
+    axios.defaults.withCredentials = true; // For cookies
+  }, []);
 
   // Check if user is logged in on page load
   useEffect(() => {
@@ -20,12 +22,14 @@ export const AuthProvider = ({ children }) => {
         const storedToken = localStorage.getItem('token');
         if (storedToken) {
           axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
+          console.log('Fetching user profile with token:', storedToken.substring(0, 10) + '...');
           const res = await axios.get('/auth/profile');
           setUser(res.data);
           setIsAuthenticated(true);
         }
       } catch (err) {
         console.error('Error loading user:', err);
+        console.error('Response:', err.response);
         localStorage.removeItem('token');
         delete axios.defaults.headers.common['Authorization'];
       } finally {
@@ -40,13 +44,17 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     setError(null);
     try {
+      console.log('Attempting to register user:', { ...userData, password: '****' });
       const res = await axios.post('/auth/register', userData);
+      console.log('Registration successful:', res.data);
       setUser(res.data);
       setIsAuthenticated(true);
       localStorage.setItem('token', res.data.token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
       return true;
     } catch (err) {
+      console.error('Registration error:', err);
+      console.error('Registration error response:', err.response);
       setError(err.response?.data?.message || 'Registration failed');
       return false;
     }
@@ -56,13 +64,17 @@ export const AuthProvider = ({ children }) => {
   const login = async (userData) => {
     setError(null);
     try {
+      console.log('Attempting to login user:', { ...userData, password: '****' });
       const res = await axios.post('/auth/login', userData);
+      console.log('Login successful:', res.data);
       setUser(res.data);
       setIsAuthenticated(true);
       localStorage.setItem('token', res.data.token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
       return true;
     } catch (err) {
+      console.error('Login error:', err);
+      console.error('Login error response:', err.response);
       setError(err.response?.data?.message || 'Login failed');
       return false;
     }

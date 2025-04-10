@@ -51,47 +51,62 @@ const Layout = ({ children }) => {
           </button>
         </div>
         
-        {/* Rest of your component remains the same */}
-        <div className="py-4">
-          <nav>
-            <ul className="space-y-1 px-2">
-              <li>
-                <NavLink 
-                  to="/dashboard" 
-                  className={({ isActive }) => 
-                    `sidebar-item ${isActive ? 'sidebar-item-active' : ''}`
-                  }
-                >
-                  <FaTachometerAlt className="mr-3" />
-                  {!collapsed && <span>Dashboard</span>}
-                </NavLink>
-              </li>
-              <li>
-                <NavLink 
-                  to="/tasks" 
-                  className={({ isActive }) => 
-                    `sidebar-item ${isActive || location.pathname.includes('/tasks/') ? 'sidebar-item-active' : ''}`
-                  }
-                >
-                  <FaTasks className="mr-3" />
-                  {!collapsed && <span>Tasks</span>}
-                </NavLink>
-              </li>
-              <li>
-                <NavLink 
-                  to="/groups" 
-                  className={({ isActive }) => 
-                    `sidebar-item ${isActive || location.pathname.includes('/groups/') ? 'sidebar-item-active' : ''}`
-                  }
-                >
-                  <FaUsers className="mr-3" />
-                  {!collapsed && <span>Groups</span>}
-                </NavLink>
-              </li>
-            </ul>
-          </nav>
-        </div>
-        {/* Footer Section */}
+      <div className="py-4">
+        <nav>
+          <ul className="space-y-1 px-2">
+            <li>
+        <NavLink
+          to="/dashboard"
+          className={({ isActive }) =>
+            `sidebar-item ${isActive ? "sidebar-item-active" : ""}`
+          }
+        >
+          <div className="flex items-center gap-2">
+            <FaTachometerAlt className="w-5 h-5" />
+            {!collapsed && <span>Dashboard</span>}
+          </div>
+        </NavLink>
+            </li>
+
+            <li>
+        <NavLink
+          to="/tasks"
+          className={({ isActive }) =>
+            `sidebar-item ${
+              isActive || location.pathname.includes("/tasks/")
+          ? "sidebar-item-active"
+          : ""
+            }`
+          }
+        >
+          <div className="flex items-center gap-2">
+            <FaTasks className="w-5 h-5" />
+            {!collapsed && <span>Tasks</span>}
+          </div>
+        </NavLink>
+            </li>
+
+            <li>
+        <NavLink
+          to="/groups"
+          className={({ isActive }) =>
+            `sidebar-item ${
+              isActive || location.pathname.includes("/groups/")
+          ? "sidebar-item-active"
+          : ""
+            }`
+          }
+        >
+          <div className="flex items-center gap-2">
+            <FaUsers className="w-5 h-5" />
+            {!collapsed && <span>Groups</span>}
+          </div>
+        </NavLink>
+            </li>
+          </ul>
+        </nav>
+      </div>
+      {/* Footer Section */}
 <div className={`absolute bottom-0 left-0 right-0 p-3 border-t border-neutral-200 bg-white shadow-sm ${collapsed ? 'text-center' : ''}`}>
   {!collapsed ? (
     <div className="flex items-center justify-between">
