@@ -58,10 +58,12 @@ const getTasks = async (req, res) => {
     
     const groupTasks = await Task.find({
       accessLevel: 'group',
-      sharedWith: { $in: groupIds }
+      sharedWith: { $in: groupIds },
+      // Exclude tasks created by the user to avoid duplicates
+      createdBy: { $ne: req.user._id }
     }).populate('createdBy', 'name email').populate('sharedWith', 'name');
 
-    // Combine and send all tasks
+    // Combine tasks without duplicates
     const allTasks = [...personalTasks, ...groupTasks];
     
     res.json(allTasks);
