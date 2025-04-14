@@ -1,3 +1,62 @@
+/* 
+
+This CSS file utilizes Tailwind CSS for styling and includes custom utility classes, animations, 
+and component styles for a consistent design system. Below is a summary of the key sections:
+
+1. Tailwind Directives:
+  - `@tailwind base;`: Includes Tailwind's base styles.
+  - `@tailwind components;`: Includes Tailwind's component styles.
+  - `@tailwind utilities;`: Includes Tailwind's utility classes.
+
+2. Global Styles:
+  - Applies a neutral background and text color to the `body`.
+
+3. Custom Components (`@layer components`):
+  - **Buttons (`.btn` and variants):**
+    - `.btn`: Base button styles with padding, rounded corners, and focus/hover effects.
+    - `.btn-primary`: Primary button with a blue theme.
+    - `.btn-secondary`: Secondary button with a neutral theme.
+    - `.btn-success`: Success button with a green theme.
+    - `.btn-danger`: Danger button with a red theme.
+    - `.btn-accent`: Accent button with a custom accent color.
+
+  - **Inputs (`.input`):**
+    - Styled input fields with focus and transition effects.
+
+  - **Cards (`.card` and `.card-hover`):**
+    - `.card`: Base card styles with shadow and padding.
+    - `.card-hover`: Adds hover effects with shadow and slight elevation.
+
+  - **Badges (`.badge` and variants):**
+    - `.badge`: Base badge styles for small labels.
+    - Variants include `.badge-primary`, `.badge-success`, `.badge-warning`, `.badge-danger`, `.badge-neutral`, and `.badge-accent`.
+
+  - **Sidebar Items (`.sidebar-item` and `.sidebar-item-active`):**
+    - `.sidebar-item`: Styles for sidebar navigation items with hover effects.
+    - `.sidebar-item-active`: Active state for sidebar items.
+
+4. Animations:
+  - **Keyframes:**
+    - `fadeIn`: Fades in with a slight upward movement.
+    - `slideIn`: Slides in from the left with opacity transition.
+    - `pulse`: Creates a pulsing effect.
+
+  - **Animation Classes:**
+    - `.animate-fade-in`: Applies the `fadeIn` animation.
+    - `.animate-slide-in`: Applies the `slideIn` animation.
+    - `.animate-pulse-custom`: Applies the `pulse` animation.
+
+5. Additional Hover Effects:
+  - **Cards (`.card-transition`):**
+    - Adds hover effects with elevation and shadow transitions.
+  - **Buttons (`.btn`):**
+    - Adds smooth hover transitions.
+
+6. Transition and Animation Utilities:
+  - Ensures smooth transitions and animations for interactive elements.
+
+This file is designed to provide reusable and consistent styles across the project while leveraging Tailwind CSS's utility-first approach.
+*/
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

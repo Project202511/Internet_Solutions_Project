@@ -1,3 +1,34 @@
+/* 
+
+This CSS file defines the styles for the main application components:
+
+1. .App:
+  - Centers the text within the application.
+
+2. .App-logo:
+  - Sets the height of the logo to 40% of the viewport's minimum dimension.
+  - Disables pointer events for the logo.
+  - Adds a spinning animation when the user does not prefer reduced motion.
+
+3. @media (prefers-reduced-motion: no-preference):
+  - Applies the spinning animation to the .App-logo with infinite duration, 20 seconds per cycle, and linear timing.
+
+4. .App-header:
+  - Sets the background color to a dark shade (#282c34).
+  - Ensures the header takes up the full viewport height.
+  - Uses flexbox to center its content both vertically and horizontally.
+  - Adjusts font size dynamically based on viewport size.
+  - Sets the text color to white.
+
+5. .App-link:
+  - Styles links with a specific blue color (#61dafb).
+
+6. @keyframes App-logo-spin:
+  - Defines a keyframe animation for rotating the logo 360 degrees.
+  - Starts at 0 degrees and ends at 360 degrees.
+
+This file is used to style the React application's main components, ensuring a responsive and visually appealing design.
+*/
 .App {
   text-align: center;
 }
