@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { 
   FaArrowLeft, FaTrash, FaUserPlus, FaUserMinus, FaEdit, 
   FaUsers, FaUserShield, FaClipboardList, FaCalendarAlt,
-  FaEllipsisV
+  FaEllipsisV, FaSyncAlt
 } from 'react-icons/fa';
 import AuthContext from '../context/AuthContext';
 import GroupForm from '../components/groups/GroupForm';
@@ -31,31 +31,56 @@ const GroupDetails = () => {
   const [newMemberEmail, setNewMemberEmail] = useState('');
   const [addingMember, setAddingMember] = useState(false);
   const [showActionMenu, setShowActionMenu] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    const fetchGroupAndTasks = async () => {
-      setLoading(true);
-      try {
-        // Fetch group details
-        const groupRes = await axios.get(`/groups/${id}`);
-        setGroup(groupRes.data);
+  // Memoize fetchGroupAndTasks to avoid recreating on each render
+  const fetchGroupAndTasks = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      // Fetch group details
+      const groupRes = await axios.get(`/groups/${id}`);
+      setGroup(groupRes.data);
 
-        // Fetch tasks associated with this group
-        const tasksRes = await axios.get('/tasks');
-        const groupTasks = tasksRes.data.filter(
-          task => task.accessLevel === 'group' && task.sharedWith?._id === id
-        );
-        setTasks(groupTasks);
-      } catch (err) {
-        setError('Failed to fetch group details');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchGroupAndTasks();
+      // Fetch tasks associated with this group
+      const tasksRes = await axios.get('/tasks');
+      
+      // Log for debugging
+      console.log('All tasks:', tasksRes.data);
+      
+      // Improved filtering to ensure correct matching
+      const groupTasks = tasksRes.data.filter(task => 
+        task.accessLevel === 'group' && 
+        task.sharedWith && 
+        (task.sharedWith._id === id || task.sharedWith === id)
+      );
+      
+      console.log('Filtered group tasks:', groupTasks);
+      console.log('Current group ID:', id);
+      
+      setTasks(groupTasks);
+      setError(null);
+    } catch (err) {
+      console.error('Error fetching data:', err);
+      setError('Failed to fetch group details or tasks');
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
   }, [id]);
+
+  // Initial fetch
+  useEffect(() => {
+    fetchGroupAndTasks();
+  }, [fetchGroupAndTasks]);
+
+  // Set up polling to refresh tasks periodically (every 30 seconds)
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      fetchGroupAndTasks();
+    }, 30000);
+    
+    return () => clearInterval(intervalId);
+  }, [fetchGroupAndTasks]);
 
   const updateGroup = async (groupId, groupData) => {
     try {
@@ -120,16 +145,24 @@ const GroupDetails = () => {
   };
 
   const deleteTask = async (taskId) => {
-    try {
-      await axios.delete(`/tasks/${taskId}`);
-      setTasks(tasks.filter(task => task._id !== taskId));
-    } catch (err) {
-      console.error('Failed to delete task', err);
+    if (window.confirm('Are you sure you want to delete this task?')) {
+      try {
+        await axios.delete(`/tasks/${taskId}`);
+        setTasks(tasks.filter(task => task._id !== taskId));
+      } catch (err) {
+        console.error('Failed to delete task', err);
+      }
     }
   };
 
+  // Manual refresh function
+  const refreshTasks = () => {
+    fetchGroupAndTasks();
+  };
+
   // Toggle the mobile action menu
-  const toggleActionMenu = () => {
+  const toggleActionMenu = (e) => {
+    e.stopPropagation();
     setShowActionMenu(!showActionMenu);
   };
 
@@ -244,7 +277,7 @@ const GroupDetails = () => {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      toggleActionMenu();
+                      toggleActionMenu(e);
                     }}
                     className="p-2 rounded-full bg-neutral-100 text-neutral-700"
                     aria-label="Group actions"
@@ -372,8 +405,19 @@ const GroupDetails = () => {
           <h2 className="text-lg sm:text-xl font-semibold text-neutral-800 flex items-center">
             <FaClipboardList className="mr-2 text-primary-500" /> Group Tasks
           </h2>
-          <div className="text-neutral-500 text-sm sm:text-base">
-            {tasks.length} {tasks.length === 1 ? 'task' : 'tasks'}
+          <div className="flex items-center">
+            <div className="text-neutral-500 text-sm sm:text-base mr-3">
+              {tasks.length} {tasks.length === 1 ? 'task' : 'tasks'}
+            </div>
+            <button 
+              onClick={refreshTasks}
+              disabled={refreshing}
+              className={`p-2 rounded-full text-primary-600 hover:bg-primary-50 ${refreshing ? 'animate-spin' : ''}`}
+              title="Refresh tasks"
+              aria-label="Refresh tasks"
+            >
+              <FaSyncAlt size={16} />
+            </button>
           </div>
         </div>
         
@@ -383,6 +427,12 @@ const GroupDetails = () => {
             <p className="text-neutral-500 text-xs sm:text-sm mt-2">
               Tasks with group access level shared with this group will appear here.
             </p>
+            <button
+              onClick={refreshTasks}
+              className="mt-4 px-4 py-2 bg-primary-50 text-primary-600 hover:bg-primary-100 rounded-md text-sm flex items-center mx-auto"
+            >
+              <FaSyncAlt className="mr-2" /> Check for New Tasks
+            </button>
           </div>
         ) : (
           <TaskList

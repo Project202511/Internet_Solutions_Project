@@ -28,7 +28,7 @@ const GroupList = ({ groups }) => {
             <h3 className="text-base sm:text-lg font-semibold text-neutral-800 mr-2 break-words">
               {group.name}
             </h3>
-            {group.owner._id === group.owner._id ? (
+            {group.isOwner || (group.owner && group.owner._id === localStorage.getItem('userId')) ? (
               <span className="bg-primary-100 text-primary-800 text-xs px-2 py-1 rounded-full flex items-center flex-shrink-0 mt-1 sm:mt-0">
                 <FaUserShield className="mr-1" size={12} /> 
                 <span className="hidden xs:inline">Owner</span>
