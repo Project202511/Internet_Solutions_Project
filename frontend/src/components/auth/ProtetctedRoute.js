@@ -2,9 +2,12 @@ import React, { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 import AuthContext from '../../context/AuthContext';
 
-const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, loading } = useContext(AuthContext);
+// lets define the ProtectedRoute component
 
+const ProtectedRoute = ({ children }) => {
+  // now, this will tell us about the status(of authentication) and loading status
+  const { isAuthenticated, loading } = useContext(AuthContext);
+// If the app is still checking auth status, show a loading gif
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">

@@ -8,7 +8,7 @@ import TaskDetails from './pages/TaskDetails';
 import GroupDetails from './pages/GroupDetails';
 import Header from './components/layout/Header';
 import ProtectedRoute from './components/auth/ProtetctedRoute';
-
+/// App is the function that will help us to route on different pages 
 function App() {
   return (
     <AuthProvider>
@@ -20,6 +20,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route 
+              // this is the route to dashboard
                 path="/dashboard" 
                 element={
                   <ProtectedRoute>
@@ -28,6 +29,7 @@ function App() {
                 } 
               />
               <Route 
+              //this is the route to our tasks with the specfic task id
                 path="/tasks/:id" 
                 element={
                   <ProtectedRoute>
@@ -35,7 +37,9 @@ function App() {
                   </ProtectedRoute>
                 } 
               />
-              <Route 
+
+              <Route
+              // this is the route to a group with the specfic group id
                 path="/groups/:id" 
                 element={
                   <ProtectedRoute>

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaUsers, FaUserShield } from 'react-icons/fa';
 
 const GroupList = ({ groups }) => {
+  // If there is no group that exists
   if (!groups || groups.length === 0) {
     return (
       <div className="bg-white rounded-lg shadow-md p-6 text-center">
@@ -10,7 +11,7 @@ const GroupList = ({ groups }) => {
       </div>
     );
   }
-
+/// IF THERE is a group that exists then:
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {groups.map((group) => (

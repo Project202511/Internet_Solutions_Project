@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
 
+//We will define the group components here like addgroup,updategroup,group data and cancel
+
 const GroupForm = ({ addGroup, updateGroup, group, onCancel }) => {
   const [formData, setFormData] = useState({
     name: group?.name || '',
