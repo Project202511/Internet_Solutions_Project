@@ -1,4 +1,4 @@
-const Group = require('../models/Group');
+const Group = require('../models/Group');  /*  Group and user model-interact with MongoDB*/
 const User = require('../models/User');
 
 // @desc    Create a new group
@@ -50,6 +50,7 @@ const getGroups = async (req, res) => {
 // @access  Private
 const getGroupById = async (req, res) => {
   try {
+    /*Find the group by its ID, populating both owner and members */
     const group = await Group.findById(req.params.id)
       .populate('owner', 'name email')
       .populate('members', 'name email');
@@ -72,7 +73,7 @@ const getGroupById = async (req, res) => {
 // @desc    Update a group
 // @route   PUT /api/groups/:id
 // @access  Private
-const updateGroup = async (req, res) => {
+const updateGroup = async (req, res) => {          /*find the group by its id  */
   try {
     const group = await Group.findById(req.params.id);
 
@@ -113,7 +114,7 @@ const deleteGroup = async (req, res) => {
 
     // Check if user is the owner of the group
     if (group.owner.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ message: 'Not authorized to delete this group' });
+      return res.status(403).json({ message: 'Not authorized to delete this group' });  /*Return error if user is not the owner */
     }
 
     // Remove group from all member users' groups arrays
@@ -122,7 +123,7 @@ const deleteGroup = async (req, res) => {
       { $pull: { groups: group._id } }
     );
 
-    await group.deleteOne();
+    await group.deleteOne();//delete the group
     res.json({ message: 'Group removed' });
   } catch (error) {
     res.status(500).json({ message: error.message });

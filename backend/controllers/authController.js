@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 // Generate JWT
+// function generates  JSON Web Token for a given user id and returns it
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: '30d',
@@ -13,17 +14,17 @@ const generateToken = (id) => {
 // @access  Public
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password } = req.body;/*Extract user details (name, email, password) from the request body*/
 
     // Check if user exists
-    const userExists = await User.findOne({ email });
+    const userExists = await User.findOne({ email }); /* Check if the user already exists by searching for the email in the database*/
 
     if (userExists) {
-      res.status(400);
+      res.status(400); // If user exists, send a 400 response code "through an error "
       throw new Error('User already exists');
     }
 
-    // Create user
+   // Create a new user in the database if they do not already exist
     const user = await User.create({
       name,
       email,
@@ -49,7 +50,7 @@ const registerUser = async (req, res) => {
         token,
       });
     } else {
-      res.status(400);
+      res.status(400); /*If user creation fails, send a 400 response code- "through an error"*/
       throw new Error('Invalid user data');
     }
   } catch (error) {
@@ -64,10 +65,11 @@ const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Find user by email
+    /* Finding user by email and include the password field in the query result */
     const user = await User.findOne({ email }).select('+password');
 
-    // Check if user exists and password matches
+    
+    /*Check if the user exists and if the provided password matches the stored password*/
     if (user && (await user.matchPassword(password))) {
       // Generate token
       const token = generateToken(user._id);
@@ -99,6 +101,7 @@ const loginUser = async (req, res) => {
 // @route   POST /api/auth/logout
 // @access  Private
 const logoutUser = (req, res) => {
+  
   res.cookie('jwt', '', {
     httpOnly: true,
     expires: new Date(0),
@@ -111,9 +114,10 @@ const logoutUser = (req, res) => {
 // @access  Private
 const getUserProfile = async (req, res) => {
   try {
+     // Finding the user by their ID, which is available in req.user
     const user = await User.findById(req.user._id);
 
-    if (user) {
+    if (user) {   //profile details
       res.json({
         _id: user._id,
         name: user.name,
