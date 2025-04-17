@@ -63,7 +63,7 @@ const getTasks = async (req, res) => {
       createdBy: { $ne: req.user._id }
     }).populate('createdBy', 'name email').populate('sharedWith', 'name');
 
-    // Combine tasks without duplicates
+    // Combine tasks without any  duplicates
     const allTasks = [...personalTasks, ...groupTasks];
     
     res.json(allTasks);
