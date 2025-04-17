@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
+// Define the user schema
 const userSchema = mongoose.Schema(
   {
-    name: {
+    name: {     // 'name' is a required field
       type: String,
       required: [true, 'Please add a name'],
     },
@@ -25,7 +26,7 @@ const userSchema = mongoose.Schema(
     groups: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Group',
+        ref: 'Group', // Reference to the 'Group' model, each user can belong to multiple groups
       },
     ],
   },
@@ -37,7 +38,7 @@ const userSchema = mongoose.Schema(
 // Encrypt password using bcrypt
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
-    next();
+    next(); // If password is not modified, continue with saving
   }
 
   const salt = await bcrypt.genSalt(10);
