@@ -12,7 +12,7 @@ const createGroup = async (req, res) => {
       name,
       description,
       owner: req.user._id,
-      members: [req.user._id], // Owner is automatically a member
+      members: [req.user._id], // Owner is automatically a member--
     });
 
     // Update user's groups array

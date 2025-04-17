@@ -1,4 +1,4 @@
-//Importing the mongoose library to interact with MongoDB
+//Importing the mongoose library to interact with MongoDB---
 const mongoose = require('mongoose');
 
 // Defining  an asynchronous function that connect to the MongoDB
