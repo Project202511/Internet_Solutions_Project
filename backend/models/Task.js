@@ -31,7 +31,7 @@ const taskSchema = mongoose.Schema(
     },
     accessLevel: {
       type: String,
-      enum: ['private', 'group', 'public'],
+      enum: ['private', 'group', 'public'], // Valid access levels for the task
       default: 'private',
     },
     createdBy: {
