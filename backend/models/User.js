@@ -26,7 +26,7 @@ const userSchema = mongoose.Schema(
     groups: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Group', // Reference to the 'Group' model, each user can belong to multiple groups
+        ref: 'Group', // Reference to the 'Group' model, each user can belong to multiple group
       },
     ],
   },
